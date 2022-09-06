@@ -3,6 +3,8 @@ package lua
 import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tengattack/gluacrypto"
+	libs "github.com/vadv/gopher-lua-libs"
 	"github.com/yuin/gluamapper"
 	Lua "github.com/yuin/gopher-lua"
 	luar "layeh.com/gopher-luar"
@@ -13,15 +15,13 @@ import (
 type TableMap map[string]interface{}
 
 type virtualMachine struct {
-	L                  *Lua.LState
-	F                  *Lua.LFunction
-	needReturnLuaState bool
+	L *Lua.LState
+	F *Lua.LFunction
 }
 
 func NewVirtualMachine() *virtualMachine {
 	exec := &virtualMachine{
-		L:                  luaPool.Borrow(),
-		needReturnLuaState: true,
+		L: luaPool.Borrow(),
 	}
 	exec.init()
 	return exec
@@ -34,6 +34,15 @@ func GetRunPath() string {
 }
 
 func (e *virtualMachine) init() {
+
+	e.L.OpenLibs()
+
+	libs.Preload(e.L)
+
+	gluacrypto.Preload(e.L)
+
+	//lua_debugger.Preload(e.L)
+
 	e.RegisterFunction("GetLuaPath", func(vm *Lua.LState) int {
 		// 绝对路径
 		e.L.Push(Lua.LString(GetRunPath() + "/script"))
@@ -43,21 +52,9 @@ func (e *virtualMachine) init() {
 
 // Destroy 销毁虚拟机，为了性能考虑，现在只是将之还给虚拟机池。
 func (e *virtualMachine) Destroy() {
-	if e.needReturnLuaState {
+	if e.L != nil {
 		luaPool.Return(e.L)
 	}
-}
-
-// RegisterFunction 注册一个全局的方法到lua
-func (e *virtualMachine) RegisterFunction(name string, fn Lua.LGFunction) {
-	e.L.SetGlobal(name, e.L.NewFunction(fn))
-}
-
-// RegisterModule 注册一个模块到lua
-func (e *virtualMachine) RegisterModule(name string, mod Lua.LGFunction) {
-	e.L.Push(e.L.NewFunction(mod))
-	e.L.Push(Lua.LString(name))
-	e.L.Call(1, 0)
 }
 
 // LoadString 加载字符串，并编译成字节码
@@ -155,6 +152,18 @@ func (e *virtualMachine) PCall3(f Lua.LValue, args ...Lua.LValue) {
 	if err := e.L.PCall(len(args), -1, nil); err != nil {
 		log.Errorf("lua pcall3 err:%v", err)
 	}
+}
+
+// RegisterFunction 注册一个全局的方法到lua
+func (e *virtualMachine) RegisterFunction(name string, fn Lua.LGFunction) {
+	e.L.SetGlobal(name, e.L.NewFunction(fn))
+}
+
+// RegisterModule 注册一个模块到lua
+func (e *virtualMachine) RegisterModule(name string, mod Lua.LGFunction) {
+	e.L.Push(e.L.NewFunction(mod))
+	e.L.Push(Lua.LString(name))
+	e.L.Call(1, 0)
 }
 
 // BindStruct 绑定一个struct到lua，可以双向操作。

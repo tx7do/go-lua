@@ -21,6 +21,7 @@ require (
 	github.com/cheggaaa/pb/v3 v3.0.5 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
+	github.com/edolphin-ydf/gopherlua-debugger v0.0.3 // indirect
 	github.com/fatih/color v1.7.0 // indirect
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -39,6 +40,7 @@ require (
 	github.com/prometheus/common v0.9.1 // indirect
 	github.com/prometheus/procfs v0.0.8 // indirect
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
+	github.com/tengattack/gluacrypto v0.0.0-20220119075059-93465d506ca9 // indirect
 	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4 // indirect
 	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
 	google.golang.org/protobuf v1.28.0 // indirect

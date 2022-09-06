@@ -97,3 +97,25 @@ func TestVirtualMachine_LoadModule(t *testing.T) {
 	err = exe.Execute()
 	assert.Nil(t, err)
 }
+
+func TestVirtualMachine_CryptoModule(t *testing.T) {
+	exe := NewVirtualMachine()
+	defer exe.Destroy()
+
+	err := exe.LoadFile("./script/test_crypto.lua")
+	assert.Nil(t, err)
+
+	err = exe.Execute()
+	assert.Nil(t, err)
+}
+
+func TestVirtualMachine_Debugger(t *testing.T) {
+	exe := NewVirtualMachine()
+	defer exe.Destroy()
+
+	err := exe.LoadFile("./script/test_debugger.lua")
+	assert.Nil(t, err)
+
+	err = exe.Execute()
+	assert.Nil(t, err)
+}

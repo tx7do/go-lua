@@ -1,7 +1,6 @@
 package lua
 
 import (
-	libs "github.com/vadv/gopher-lua-libs"
 	Lua "github.com/yuin/gopher-lua"
 	"sync"
 )
@@ -32,11 +31,6 @@ func (pl *lStatePool) createLuaState() *Lua.LState {
 		SkipOpenLibs:        true,
 		IncludeGoStackTrace: true,
 	})
-
-	vm.OpenLibs()
-
-	libs.Preload(vm)
-
 	return vm
 }
 
