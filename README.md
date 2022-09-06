@@ -1,6 +1,6 @@
 # go-lua
 
-基于[GopherLua](https://github.com/yuin/gopher-lua)封装了一个脚本引擎。
+基于[GopherLua](https://github.com/yuin/gopher-lua)封装的一个Lua脚本引擎。
 
 GopherLua是一个日本人使用纯Golang开发的Lua虚拟机，Lua的基本特性都实现得差不多了，也是够用了。
 
